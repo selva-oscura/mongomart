@@ -141,7 +141,7 @@ function ItemDAO(database) {
                         console.log(err);
                     }
                     if(docs){
-                        console.log('docs found for getItems', category, docs.length);
+                        // console.log('docs found for getItems', category, docs.length);
                         docs.forEach(function(doc){
                             pageItems.push(doc);
                         });
@@ -157,7 +157,7 @@ function ItemDAO(database) {
                         console.log(err);
                     }
                     if(docs){
-                        console.log('docs found for getItems', category, docs.length);
+                        // console.log('docs found for getItems', category, docs.length);
                         docs.forEach(function(doc){
                             pageItems.push(doc);
                         });

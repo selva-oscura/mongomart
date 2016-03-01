@@ -43,17 +43,65 @@ function ItemDAO(database) {
         *
         */
 
-        var categories = [];
-        var category = {
-            _id: "All",
-            num: 9999
-        };
+        // var categories = [];
+        // var category = {
+        //     _id: "All",
+        //     num: 9999
+        // };
 
-        categories.push(category)
+        // categories.push(category)
+
+        // callback(categories);
 
         // TODO-lab1A Replace all code above (in this method).
+
+        var categories = [];
+        // totalItems will be used to count the total number of items in each category (Since all items in this collection belong to one and only one collection, it is feasible to just add up the tally being generated for each category and use that amount, thereby avoiding a second db query.  If items could belong to more than one category or to no category, the preferred method would be to just count the item collection)
+        var totalItems = 0;
+        // aggregate all items by category (num:{$sum:1} will generate a count of the number of items in each category)
+        this.db.collection('item').aggregate([
+            {$group:
+                {
+                    _id:{category:'$category'},
+                    num:{$sum:1}
+                }
+            },{$sort:
+                {
+                    _id:1
+                }
+            },{$project:
+                {
+                    '_id.category':1,
+                    num:1
+                }
+            }
+        ]).toArray(function(err, docs){
+            if(err){
+                console.log(err);
+            }
+            if(docs){
+                // console.log('docs found!');
+                docs.forEach(function(doc){
+                    var category = {
+                        _id: doc._id.category,
+                        num:doc.num
+                    }
+                    // console.log('category', category);
+                    categories.push(category);
+                    // totalItems incremented by the number items per category
+                    totalItems+=doc.num;
+                });
+                // create 'all' category and add to beginning of categories array
+                var category = {
+                    _id: "All",
+                    num: totalItems
+                };
+                categories.unshift(category);
+                // console.log('array of all categories', categories);
+                callback(categories);
+            }
+        });
         
-        callback(categories);
     }
 
 

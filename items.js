@@ -121,15 +121,51 @@ function ItemDAO(database) {
          *
          */
 
-        var pageItem = this.createDummyItem();
-        var pageItems = [];
-        for (var i=0; i<5; i++) {
-            pageItems.push(pageItem);
-        }
+        // var pageItem = this.createDummyItem();
+        // var pageItems = [];
+        // for (var i=0; i<5; i++) {
+        //     pageItems.push(pageItem);
+        // }
+        // callback(pageItems);
 
         // TODO-lab1B Replace all code above (in this method).
 
-        callback(pageItems);
+        var pageItems = [];
+        var skip = page*itemsPerPage;
+        var limit = itemsPerPage;
+        if(category === "All" || !category){
+            this.db.collection('item')
+                .find({},{skip:skip, limit:limit})
+                .toArray(function(err, docs){
+                    if(err){
+                        console.log(err);
+                    }
+                    if(docs){
+                        console.log('docs found for getItems', category, docs.length);
+                        docs.forEach(function(doc){
+                            pageItems.push(doc);
+                        });
+                        callback(pageItems);
+                    }
+                });
+
+        }else{        
+            this.db.collection('item')
+                .find({category:category},{skip:skip, limit:limit})
+                .toArray(function(err, docs){
+                    if(err){
+                        console.log(err);
+                    }
+                    if(docs){
+                        console.log('docs found for getItems', category, docs.length);
+                        docs.forEach(function(doc){
+                            pageItems.push(doc);
+                        });
+                        callback(pageItems);
+                    }
+                })
+        }
+
     }
 
 

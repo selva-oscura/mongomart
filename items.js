@@ -172,7 +172,8 @@ function ItemDAO(database) {
     this.getNumItems = function(category, callback) {
         "use strict";
         
-        var numItems = 0;
+        // var numItems = 0;
+        // callback(numItems);
 
         /*
          * TODO-lab1C
@@ -186,7 +187,34 @@ function ItemDAO(database) {
          *
          */
         
-        callback(numItems);
+        var numItems = 0;
+        if(category === "All" || category === ""){
+            this.db.collection('item')
+                .count({}, function(err, count){
+                    if(err){
+                        console.log(err)
+                    }
+                    if(count){
+                        numItems = count;
+                        // console.log(category, numItems);
+                        callback(numItems);
+                    }
+                });
+        }else{
+            this.db.collection('item')
+                .count({category:category}, function(err, count){
+                    if(err){
+                        console.log(err)
+                    }
+                    if(count){
+                        numItems = count;
+                        // console.log(category, numItems);
+                        callback(numItems);
+                    }
+                });
+
+        }
+        
     }
 
 

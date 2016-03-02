@@ -91,9 +91,39 @@ function CartDAO(database) {
          *
          */
 
-        callback(null);
+        // callback(null);
 
         // TODO-lab6 Replace all code above (in this method).
+
+        this.db.collection('cart')
+            .aggregate([
+                {$match: {userId: userId}},
+                {$unwind: "$items"},
+                {$match:{
+                    "items._id": itemId
+                }},
+                {$project:{
+                    _id: "$items._id",
+                    quantity: "$items.quantity"
+                }}
+            ], function(err, doc){
+                if(err){
+                    console.log(err);
+                }
+                if(doc){
+                    // console.log('this is the doc in the cart aggregate',doc);
+                    if(doc.length===0){
+                        // console.log(0);
+                        callback(null);
+                    }
+                    if(doc.length===1){
+                        // console.log(doc[0])
+                        callback(doc[0]);
+                    }
+                    console.log('error in itemInCart -- doc length of unexpected amount')
+                }
+        });
+
     }
 
     

@@ -79,27 +79,26 @@ function ItemDAO(database) {
             if(err){
                 console.log(err);
             }
-            if(docs){
-                // console.log('docs found!');
-                docs.forEach(function(doc){
-                    var category = {
-                        _id: doc._id.category,
-                        num:doc.num
-                    }
-                    // console.log('category', category);
-                    categories.push(category);
-                    // totalItems incremented by the number items per category
-                    totalItems+=doc.num;
-                });
-                // create 'all' category and add to beginning of categories array
+            assert.equal(null, err);
+            // console.log('docs found!');
+            docs.forEach(function(doc){
                 var category = {
-                    _id: "All",
-                    num: totalItems
-                };
-                categories.unshift(category);
-                // console.log('array of all categories', categories);
-                callback(categories);
-            }
+                    _id: doc._id.category,
+                    num:doc.num
+                }
+                // console.log('category', category);
+                categories.push(category);
+                // totalItems incremented by the number items per category
+                totalItems+=doc.num;
+            });
+            // create 'all' category and add to beginning of categories array
+            var category = {
+                _id: "All",
+                num: totalItems
+            };
+            categories.unshift(category);
+            // console.log('array of all categories', categories);
+            callback(categories);
         });
         
     }
@@ -140,15 +139,13 @@ function ItemDAO(database) {
                     if(err){
                         console.log(err);
                     }
-                    if(docs){
-                        // console.log('docs found for getItems', category, docs.length);
-                        docs.forEach(function(doc){
-                            pageItems.push(doc);
-                        });
-                        callback(pageItems);
-                    }
+                    assert.equal(null, err);
+                    // console.log('docs found for getItems', category, docs.length);
+                    docs.forEach(function(doc){
+                        pageItems.push(doc);
+                    });
+                    callback(pageItems);
                 });
-
         }else{        
             this.db.collection('item')
                 .find({category:category},{skip:skip, limit:limit})
@@ -156,14 +153,13 @@ function ItemDAO(database) {
                     if(err){
                         console.log(err);
                     }
-                    if(docs){
-                        // console.log('docs found for getItems', category, docs.length);
-                        docs.forEach(function(doc){
-                            pageItems.push(doc);
-                        });
-                        callback(pageItems);
-                    }
-                })
+                    assert.equal(null, err);
+                    // console.log('docs found for getItems', category, docs.length);
+                    docs.forEach(function(doc){
+                        pageItems.push(doc);
+                    });
+                    callback(pageItems);
+                });
         }
 
     }
@@ -194,11 +190,10 @@ function ItemDAO(database) {
                     if(err){
                         console.log(err)
                     }
-                    if(count){
-                        numItems = count;
-                        // console.log(category, numItems);
-                        callback(numItems);
-                    }
+                    assert.equal(null, err);
+                    numItems = count;
+                    // console.log(category, numItems);
+                    callback(numItems);
                 });
         }else{
             this.db.collection('item')
@@ -206,11 +201,10 @@ function ItemDAO(database) {
                     if(err){
                         console.log(err)
                     }
-                    if(count){
-                        numItems = count;
-                        // console.log(category, numItems);
-                        callback(numItems);
-                    }
+                    assert.equal(null, err);
+                    numItems = count;
+                    // console.log(category, numItems);
+                    callback(numItems);
                 });
 
         }
@@ -259,12 +253,11 @@ function ItemDAO(database) {
                 if(err){
                     console.log(err)
                 }
-                if(docs){
-                    // console.log(docs);
-                    docs.forEach(function(doc){
-                        items.push(doc);
-                    })
-                }
+                assert.equal(null, err);
+                // console.log(docs);
+                docs.forEach(function(doc){
+                    items.push(doc);
+                })
                 // console.log(items);
                 callback(items);
             });
@@ -292,9 +285,8 @@ function ItemDAO(database) {
                 if(err){
                     console.log(err)
                 }
-                if(count){
-                    numItems = count;
-                }
+                assert.equal(null, err);
+                numItems = count;
                 callback(numItems);
             });
     }
@@ -325,10 +317,9 @@ function ItemDAO(database) {
                 if(err){
                     console.log(err);
                 }
-                if(doc){
-                    // console.log(doc);
-                    item = doc;
-                }
+                assert.equal(null, err);
+                // console.log(doc);
+                item = doc;
                 callback(item);
             });
 
@@ -338,7 +329,7 @@ function ItemDAO(database) {
     this.getRelatedItems = function(callback) {
         "use strict";
 
-        this.db.collection("item").find({})
+        this.db.collection("itemasdf").find({})
             .limit(4)
             .toArray(function(err, relatedItems) {
                 assert.equal(null, err);
@@ -376,10 +367,9 @@ function ItemDAO(database) {
             if(err){
                 console.log(err);
             }
-            if(doc){
-                // console.log('doc',doc);
-                callback(doc.reviews);  
-            }
+            assert.equal(null, err);
+            // console.log('doc',doc);
+            callback(doc.reviews);  
         });
 
     }

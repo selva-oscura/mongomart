@@ -52,12 +52,11 @@ function CartDAO(database) {
             if(err){
                 console.log(err)
             }
-            if(doc){
-                // console.log(doc)
-                userCart = doc;
-                // console.log(userCart);
-                callback(userCart);
-            }
+            assert.equal(null, err);
+            // console.log(doc)
+            userCart = doc;
+            // console.log(userCart);
+            callback(userCart);
         });
 
     }
@@ -110,17 +109,16 @@ function CartDAO(database) {
                 if(err){
                     console.log(err);
                 }
-                if(doc){
-                    // console.log('this is the doc in the cart aggregate',doc);
-                    if(doc.length===0){
-                        // console.log(0);
-                        callback(null);
-                    }else if(doc.length===1){
-                        // console.log(doc[0])
-                        callback(doc[0]);
-                    }else{
-                        console.log('error in itemInCart -- doc length of unexpected amount')
-                    }
+                assert.equal(null, err);
+                // console.log('this is the doc in the cart aggregate',doc);
+                if(doc.length===0){
+                    // console.log(0);
+                    callback(null);
+                }else if(doc.length===1){
+                    // console.log(doc[0])
+                    callback(doc[0]);
+                }else{
+                    console.log('error in itemInCart -- doc length of unexpected amount')
                 }
         });
 

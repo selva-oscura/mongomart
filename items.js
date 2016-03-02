@@ -377,7 +377,7 @@ function ItemDAO(database) {
                 console.log(err);
             }
             if(doc){
-                console.log('doc',doc);
+                // console.log('doc',doc);
                 callback(doc.reviews);  
             }
         });

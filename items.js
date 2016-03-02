@@ -311,11 +311,27 @@ function ItemDAO(database) {
          *
          */
         
-        var item = this.createDummyItem();
+        // var item = this.createDummyItem();
+        // callback(item);
 
         // TODO-lab3 Replace all code above (in this method).
 
-        callback(item);
+        var item;
+        // console.log(itemId);
+        this.db.collection('item')
+            .findOne({
+                _id: itemId
+            }, function(err, doc){
+                if(err){
+                    console.log(err);
+                }
+                if(doc){
+                    // console.log(doc);
+                    item = doc;
+                }
+                callback(item);
+            });
+
     }
 
 

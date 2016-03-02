@@ -115,12 +115,12 @@ function CartDAO(database) {
                     if(doc.length===0){
                         // console.log(0);
                         callback(null);
-                    }
-                    if(doc.length===1){
+                    }else if(doc.length===1){
                         // console.log(doc[0])
                         callback(doc[0]);
+                    }else{
+                        console.log('error in itemInCart -- doc length of unexpected amount')
                     }
-                    console.log('error in itemInCart -- doc length of unexpected amount')
                 }
         });
 
@@ -194,8 +194,7 @@ function CartDAO(database) {
 
 
     this.updateQuantity = function(userId, itemId, quantity, callback) {
-        "use strict";
-        
+        "use strict";        
         /*
         * TODO-lab7
         *
@@ -213,16 +212,51 @@ function CartDAO(database) {
         *
         */
 
-        var userCart = {
-            userId: userId,
-            items: []
-        }
-        var dummyItem = this.createDummyItem();
-        dummyItem.quantity = quantity;
-        userCart.items.push(dummyItem);
-        callback(userCart);
+        // var userCart = {
+        //     userId: userId,
+        //     items: []
+        // }
+        // var dummyItem = this.createDummyItem();
+        // dummyItem.quantity = quantity;
+        // userCart.items.push(dummyItem);
+        // callback(userCart);
         
         // TODO-lab7 Replace all code above (in this method).
+
+        if(quantity===0){
+            this.db.collection('cart').findOneAndUpdate(
+                {userId:userId},
+                {$pull:
+                    {items:{_id:itemId}}
+                },{
+                    upsert: true,
+                    returnOriginal: false
+                },function(err, doc){
+                    if(err){
+                        console.log(err);
+                    }
+                    assert.equal(null, err);
+                    // console.log(doc);
+                    callback(doc.value);
+                }
+            )
+        }else{
+            this.db.collection('cart').findOneAndUpdate(
+                {userId:userId, "items._id": itemId},
+                {$set:{"items.$.quantity": quantity}},
+                {
+                    upsert: true,
+                    returnOriginal: false
+                }, function(err, doc){
+                    if(err){
+                        console.log(err)
+                    }
+                    assert.equal(null, err);
+                    // console.log(doc);
+                    callback(doc.value);
+                }
+            )
+        }
 
     }
 

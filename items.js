@@ -236,15 +236,38 @@ function ItemDAO(database) {
          *
          */
         
-        var item = this.createDummyItem();
-        var items = [];
-        for (var i=0; i<5; i++) {
-            items.push(item);
-        }
+        // var item = this.createDummyItem();
+        // var items = [];
+        // for (var i=0; i<5; i++) {
+        //     items.push(item);
+        // }
+
+        // callback(items);
 
         // TODO-lab2A Replace all code above (in this method).
 
-        callback(items);
+        // console.log(query, page, itemsPerPage);
+        var items = [];
+        var skip = page*itemsPerPage;
+        var limit = itemsPerPage;
+        this.db.collection('item')
+            .find({
+                $text:{$search: query}
+            },{
+                limit:limit, skip:skip
+            }).toArray(function(err, docs){
+                if(err){
+                    console.log(err)
+                }
+                if(docs){
+                    // console.log(docs);
+                    docs.forEach(function(doc){
+                        items.push(doc);
+                    })
+                }
+                // console.log(items);
+                callback(items);
+            });
     }
 
 

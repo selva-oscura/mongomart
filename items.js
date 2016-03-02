@@ -366,9 +366,22 @@ function ItemDAO(database) {
             date: Date.now()
         }
 
-        var dummyItem = this.createDummyItem();
-        dummyItem.reviews = [reviewDoc];
-        callback(dummyItem);
+        // var dummyItem = this.createDummyItem();
+        // dummyItem.reviews = [reviewDoc];
+        // callback(dummyItem);
+
+        // console.log(reviewDoc);
+
+        this.db.collection('item').updateOne({_id:itemId},{$push:{reviews:reviewDoc}}, function(err, doc){
+            if(err){
+                console.log(err);
+            }
+            if(doc){
+                console.log('doc',doc);
+                callback(doc.reviews);  
+            }
+        });
+
     }
 
 

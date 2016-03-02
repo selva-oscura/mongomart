@@ -275,6 +275,7 @@ function ItemDAO(database) {
         "use strict";
 
         var numItems = 0;
+        // callback(numItems);
         
         /*
         * TODO-lab2B
@@ -284,8 +285,18 @@ function ItemDAO(database) {
         * to the callback function.
         *
         */
-
-        callback(numItems);
+        this.db.collection('item')
+            .count({
+                $text:{$search: query}
+            }, function(err, count){
+                if(err){
+                    console.log(err)
+                }
+                if(count){
+                    numItems = count;
+                }
+                callback(numItems);
+            });
     }
 
 
